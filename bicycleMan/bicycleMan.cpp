@@ -1,11 +1,13 @@
 #include <iostream>
-
+#include <fstream>
+#include <string>
+#include <sstream>
 using namespace std;
 
 struct edge
 {
-	int hotelNumber;
-	int totalValue;
+	int hotelNumber = 0;
+	int totalValue = 0;
 };
 struct city
 {
@@ -23,63 +25,58 @@ void path(city[], int);
 
 int main()
 {
-	int n = 12;
-	edge w[13][13];
-	bestPrice d[13];
-	city p[13];
-	w[0][1].totalValue = 50000 * 22 + 700000; 
-	w[0][1].hotelNumber = 1;
-	w[0][2].totalValue = 50000 * 8 + 800000;
-	w[0][2].hotelNumber = 1;
-	w[0][3].totalValue = 50000 * 12 + 800000;
-	w[0][3].hotelNumber = 1;
-	w[1][4].totalValue = 50000 * 8 + 500000;
-	w[1][4].hotelNumber = 1;
-	w[1][5].totalValue = 50000 * 10 + 700000;
-	w[1][5].hotelNumber = 1;
-	w[2][4].totalValue = 50000 * 25 + 500000;
-	w[2][4].hotelNumber = 1;
-	w[2][5].totalValue = 50000 * 10 + 700000;
-	w[2][5].hotelNumber = 1;
-	w[4][6].totalValue = 50000 * 25 + 500000;
-	w[4][6].hotelNumber = 1;
-	w[4][7].totalValue = 50000 * 30 + 700000;
-	w[4][7].hotelNumber = 1;
-	w[4][8].totalValue = 50000 * 18 + 700000;
-	w[4][8].hotelNumber = 1;
-	w[4][9].totalValue = 50000 * 27 + 600000;
-	w[4][9].hotelNumber = 1;
-	w[5][6].totalValue = 50000 * 12 + 500000;
-	w[5][6].hotelNumber = 1;
-	w[5][7].totalValue = 50000 * 10 + 700000;
-	w[5][7].hotelNumber = 1;
-	w[5][8].totalValue = 50000 * 8 + 700000;
-	w[5][8].hotelNumber = 1;
-	w[5][9].totalValue = 50000 * 7 + 600000;
-	w[5][9].hotelNumber = 1;
-	w[6][10].totalValue = 50000 * 28 + 500000;
-	w[6][10].hotelNumber = 1;
-	w[6][11].totalValue = 50000 * 13 + 700000;
-	w[6][11].hotelNumber = 1;
-	w[6][12].totalValue = 50000 * 15 + 600000;
-	w[6][12].hotelNumber = 1;
-	w[7][10].totalValue = 50000 * 8 + 500000;
-	w[7][10].hotelNumber = 1;
-	w[7][11].totalValue = 50000 * 10 + 700000;
-	w[7][11].hotelNumber = 1;
-	w[7][12].totalValue = 50000 * 10 + 600000;
-	w[7][12].hotelNumber = 1;
-	w[8][10].totalValue = 50000 * 15 + 500000;
-	w[8][10].hotelNumber = 1;
-	w[8][11].totalValue = 50000 * 10 + 700000;
-	w[8][11].hotelNumber = 1;
-	w[8][12].totalValue = 50000 * 7 + 600000;
-	w[8][12].hotelNumber = 1;
-
-	//readfile
+	int counter, lastStop = 3, hotelNum = 0, n = 0;
+	edge w[20][20];
+	bestPrice d[20];
+	city p[20];
+	ifstream in("in.txt");
+	in >> counter;
+	string line;
+	for (int i = 0; i < counter; i++)
+	{
+		in >> lastStop;
+		n += lastStop;
+	}
+	getline(in, line);
+	while (getline(in, line))
+	{
+		if (line == "")
+			break;
+		stringstream datas;
+		datas.str(line);
+		int i, j, k;
+		datas >> i; datas >> j; datas >> k;
+		w[i][j].totalValue += k * 50000;
+	}
+	while (getline(in, line))
+	{
+		stringstream datas;
+		datas.str(line);
+		int i, j, counter = 1, minimum = 100000000;
+		datas >> i;
+		while (datas >> j)
+		{
+			if (j < minimum)
+			{
+				minimum = j;
+				hotelNum = counter;
+			}
+			counter++;
+		}
+		counter = 0;
+		while (counter < n)
+		{
+			if (w[counter][i].totalValue != 0)
+			{
+				w[counter][i].totalValue += minimum;
+				w[counter][i].hotelNumber = hotelNum;
+			}
+			counter++;
+		}
+	}
 	for (int i = 0; i <= 12; i++)
 		for (int j = 0; j <= 12; j++)
-			if (w[i][j].totalValue < 0)
+			if (w[i][j].totalValue == 0)
 				w[i][j].totalValue = 100000000;
 
 	for (int i = 0; i <= 12; i++)
@@ -87,7 +84,7 @@ int main()
 		d[i].price = w[0][i].totalValue;
 		p[i].cityNumber = 0;
 	}
-	for (int k = 1; k <= 4; k++)
+	for (int k = 1; k <= counter; k++)
 		for (int i = 0; i <= 12; i++)
 			for (int j = 0; j <= 12; j++)
 				if (w[j][i].totalValue + d[j].price < d[i].price)
@@ -98,9 +95,13 @@ int main()
 					p[i].hotelNumber = w[j][i].hotelNumber;
 				}
 	int mini = 100000000;
-	int miniMap;
-	for (int i = 0; i < 3; i++)
+	int miniMap = 0;
+	for (int i = 0; i < lastStop; i++)
 	{
+		if (n - i < 0)
+		{
+			break;
+		}
 		if (d[n - i].price < mini)
 		{
 			mini = d[n - i].price;
