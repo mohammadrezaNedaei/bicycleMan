@@ -4,14 +4,12 @@ using namespace std;
 
 struct edge
 {
-	int value;
-	int hotel;
 	int hotelNumber;
 	int totalValue;
 };
 struct city
 {
-	int number;
+	int cityNumber;
 	int hotelNumber;
 };
 
@@ -87,7 +85,7 @@ int main()
 	for (int i = 0; i <= 12; i++)
 	{
 		d[i].price = w[0][i].totalValue;
-		p[i].number = 0;
+		p[i].cityNumber = 0;
 	}
 	for (int k = 1; k <= 4; k++)
 		for (int i = 0; i <= 12; i++)
@@ -96,7 +94,7 @@ int main()
 				{
 					d[i].price = w[j][i].totalValue + d[j].price;
 					d[i].hotelNumber = w[j][i].hotelNumber;
-					p[i].number = j;
+					p[i].cityNumber = j;
 					p[i].hotelNumber = w[j][i].hotelNumber;
 				}
 	int mini = 100000000;
@@ -116,10 +114,10 @@ int main()
 
 void path(city p[], int i)
 {
-	if (p[i].number != 0)
+	if (p[i].cityNumber != 0)
 	{
-		path(p, p[i].number);
-		cout << p[i].number << " " << p[i].hotelNumber << endl;
+		path(p, p[i].cityNumber);
+		cout << p[i].cityNumber << " " << p[i].hotelNumber << endl;
 		return;
 	}
 	if (i == 0)
