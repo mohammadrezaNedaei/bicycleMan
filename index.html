@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimized Biking Route</title>
+    <script>
+        async function runCode() {
+            const input = document.getElementById('input').value;
+            const response = await fetch('https://<your-repl-username>.repl.co/run', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ input: input })
+            });
+
+            const data = await response.json();
+            document.getElementById('output').innerText = data.output || data.error;
+        }
+    </script>
+</head>
+<body>
+    <h1>Optimized Biking Route</h1>
+    <form onsubmit="event.preventDefault(); runCode();">
+        <textarea id="input" rows="10" cols="50">3
+          ---------------
+        </textarea><br>
+        <button type="submit">Run Code</button>
+    </form>
+    <h2>Output</h2>
+    <pre id="output"></pre>
+</body>
+</html>
