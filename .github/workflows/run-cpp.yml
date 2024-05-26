@@ -25,9 +25,9 @@ jobs:
       - name: Prepare output for GitHub Pages
         run: |
           mkdir -p output
-          echo "<html><body><pre>" > output/index.html
+          echo "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Optimized Biking Route</title></head><body><h1>Optimized Biking Route</h1><div id=\"output\"><pre>" > output/index.html
           cat result.txt >> output/index.html
-          echo "</pre></body></html>" >> output/index.html
+          echo "</pre></div></body></html>" >> output/index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
